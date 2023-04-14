@@ -69,6 +69,7 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
   int _currentFocus = 0;
   double _progressAnimated = 0;
   bool _goNext = true;
+  Orientation? _orientation;
 
   @override
   void initState() {
@@ -237,47 +238,62 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
     return (_targetPosition?.size.height ?? 0) + _getPaddingFocus() * 4;
   }
 
+  void _refreshAfterOrientationChange() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      super._runFocus();
+      widget.focus?.call(_targetFocus);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _targetFocus.enableOverlayTab
-          ? () => _tapHandler(overlayTap: true)
-          : null,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, child) {
-          _progressAnimated = _curvedAnimation.value;
-          return Stack(
-            children: <Widget>[
-              SizedBox(
-                width: double.maxFinite,
-                height: double.maxFinite,
-                child: CustomPaint(
-                  painter: _getPainter(_targetFocus),
-                ),
-              ),
-              Positioned(
-                left: left,
-                top: top,
-                child: InkWell(
-                  borderRadius: _betBorderRadiusTarget(),
-                  onTapDown: _tapHandlerForPosition,
-                  onTap: _targetFocus.enableTargetTab
-                      ? () => _tapHandler(targetTap: true)
-
-                      /// Essential for collecting [TapDownDetails]. Do not make [null]
-                      : () {},
-                  child: Container(
-                    color: Colors.transparent,
-                    width: width,
-                    height: height,
+    return OrientationBuilder(
+      builder: (context, orientation) {
+        if (_orientation != orientation) {
+          _refreshAfterOrientationChange();
+        }
+        _orientation = orientation;
+        return InkWell(
+          onTap: _targetFocus.enableOverlayTab
+              ? () => _tapHandler(overlayTap: true)
+              : null,
+          child: AnimatedBuilder(
+            animation: _controller,
+            builder: (_, child) {
+              _progressAnimated = _curvedAnimation.value;
+              return Stack(
+                children: <Widget>[
+                  SizedBox(
+                    width: double.maxFinite,
+                    height: double.maxFinite,
+                    child: CustomPaint(
+                      painter: _getPainter(_targetFocus),
+                    ),
                   ),
-                ),
-              )
-            ],
-          );
-        },
-      ),
+                  Positioned(
+                    left: left,
+                    top: top,
+                    child: InkWell(
+                      borderRadius: _betBorderRadiusTarget(),
+                      onTapDown: _tapHandlerForPosition,
+                      onTap: _targetFocus.enableTargetTab
+                          ? () => _tapHandler(targetTap: true)
+
+                          /// Essential for collecting [TapDownDetails]. Do not make [null]
+                          : () {},
+                      child: Container(
+                        color: Colors.transparent,
+                        width: width,
+                        height: height,
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -347,56 +363,69 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
     _controllerPulse.addStatusListener(_listenerPulse);
   }
 
+  void _refreshAfterOrientationChange() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      super._runFocus();
+      widget.focus?.call(_targetFocus);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _targetFocus.enableOverlayTab
-          ? () => _tapHandler(overlayTap: true)
-          : null,
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (_, child) {
-          _progressAnimated = _curvedAnimation.value;
-          return AnimatedBuilder(
-            animation: _controllerPulse,
-            builder: (_, child) {
-              if (_finishFocus) {
-                _progressAnimated = _tweenPulse.value;
-              }
-              return Stack(
-                children: <Widget>[
-                  SizedBox(
-                    width: double.maxFinite,
-                    height: double.maxFinite,
-                    child: CustomPaint(
-                      painter: _getPainter(_targetFocus),
-                    ),
-                  ),
-                  Positioned(
-                    left: left,
-                    top: top,
-                    child: InkWell(
-                      borderRadius: _betBorderRadiusTarget(),
-                      onTap: _targetFocus.enableTargetTab
-                          ? () => _tapHandler(targetTap: true)
-
-                          /// Essential for collecting [TapDownDetails]. Do not make [null]
-                          : () {},
-                      onTapDown: _tapHandlerForPosition,
-                      child: Container(
-                        color: Colors.transparent,
-                        width: width,
-                        height: height,
+    return OrientationBuilder(builder: (context, orientation) {
+      if (_orientation != orientation) {
+        _refreshAfterOrientationChange();
+      }
+      _orientation = orientation;
+      return InkWell(
+        onTap: _targetFocus.enableOverlayTab
+            ? () => _tapHandler(overlayTap: true)
+            : null,
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, child) {
+            _progressAnimated = _curvedAnimation.value;
+            return AnimatedBuilder(
+              animation: _controllerPulse,
+              builder: (_, child) {
+                if (_finishFocus) {
+                  _progressAnimated = _tweenPulse.value;
+                }
+                return Stack(
+                  children: <Widget>[
+                    SizedBox(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      child: CustomPaint(
+                        painter: _getPainter(_targetFocus),
                       ),
                     ),
-                  )
-                ],
-              );
-            },
-          );
-        },
-      ),
-    );
+                    Positioned(
+                      left: left,
+                      top: top,
+                      child: InkWell(
+                        borderRadius: _betBorderRadiusTarget(),
+                        onTap: _targetFocus.enableTargetTab
+                            ? () => _tapHandler(targetTap: true)
+
+                            /// Essential for collecting [TapDownDetails]. Do not make [null]
+                            : () {},
+                        onTapDown: _tapHandlerForPosition,
+                        child: Container(
+                          color: Colors.transparent,
+                          width: width,
+                          height: height,
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+          },
+        ),
+      );
+    });
   }
 
   @override
