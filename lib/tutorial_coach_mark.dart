@@ -32,6 +32,7 @@ class TutorialCoachMark {
   final Duration pulseAnimationDuration;
   final bool pulseEnable;
   final Widget? skipWidget;
+  final EdgeInsets skipWidgetPadding;
   final bool showSkipInLastTarget;
 
   OverlayEntry? _overlayEntry;
@@ -47,6 +48,7 @@ class TutorialCoachMark {
     this.onSkip,
     this.alignSkip = Alignment.bottomRight,
     this.textSkip = "SKIP",
+    this.skipWidgetPadding = const EdgeInsets.all(20),
     this.textStyleSkip = const TextStyle(color: Colors.white),
     this.hideSkip = false,
     this.opacityShadow = 0.8,
@@ -71,6 +73,7 @@ class TutorialCoachMark {
           onClickSkip: skip,
           alignSkip: alignSkip,
           skipWidget: skipWidget,
+          skipWidgetPadding: skipWidgetPadding,
           textSkip: textSkip,
           textStyleSkip: textStyleSkip,
           hideSkip: hideSkip,

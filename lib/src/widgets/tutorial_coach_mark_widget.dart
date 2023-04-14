@@ -29,6 +29,7 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.pulseVariation,
     this.pulseEnable = true,
     this.skipWidget,
+    this.skipWidgetPadding,
     this.rootOverlay = false,
     this.showSkipInLastTarget = false,
   })  : assert(targets.length > 0),
@@ -56,6 +57,7 @@ class TutorialCoachMarkWidget extends StatefulWidget {
   final Widget? skipWidget;
   final bool rootOverlay;
   final bool showSkipInLastTarget;
+  final EdgeInsets? skipWidgetPadding;
 
   @override
   TutorialCoachMarkWidgetState createState() => TutorialCoachMarkWidgetState();
@@ -256,7 +258,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
           child: InkWell(
             onTap: skip,
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: widget.skipWidgetPadding ?? EdgeInsets.zero,
               child: IgnorePointer(
                 child: widget.skipWidget ??
                     Text(
