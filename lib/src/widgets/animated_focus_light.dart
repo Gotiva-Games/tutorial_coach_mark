@@ -22,6 +22,7 @@ class AnimatedFocusLight extends StatefulWidget {
   final Duration? focusAnimationDuration;
   final Duration? unFocusAnimationDuration;
   final Duration? pulseAnimationDuration;
+  final Duration? delayBetweenFocusAnimations;
   final Tween<double>? pulseVariation;
   final bool pulseEnable;
   final bool rootOverlay;
@@ -42,6 +43,7 @@ class AnimatedFocusLight extends StatefulWidget {
     this.unFocusAnimationDuration,
     this.pulseAnimationDuration,
     this.pulseVariation,
+    this.delayBetweenFocusAnimations,
     this.pulseEnable = true,
     this.rootOverlay = false,
   })  : assert(targets.length > 0),
@@ -169,9 +171,11 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
       _finish();
       return;
     }
-    _currentFocus++;
-
-    _runFocus();
+    Future.delayed(widget.delayBetweenFocusAnimations ?? Duration.zero)
+        .then((_) {
+      _currentFocus++;
+      _runFocus();
+    });
   }
 
   void _previousFocus() {
@@ -179,8 +183,11 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
       _finish();
       return;
     }
-    _currentFocus--;
-    _runFocus();
+    Future.delayed(widget.delayBetweenFocusAnimations ?? Duration.zero)
+        .then((_) {
+      _currentFocus--;
+      _runFocus();
+    });
   }
 
   void _finish() {

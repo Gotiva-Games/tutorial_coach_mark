@@ -26,6 +26,7 @@ class TutorialCoachMarkWidget extends StatefulWidget {
     this.focusAnimationDuration,
     this.unFocusAnimationDuration,
     this.pulseAnimationDuration,
+    this.delayBetweenFocusAnimations,
     this.pulseVariation,
     this.pulseEnable = true,
     this.skipWidget,
@@ -52,6 +53,7 @@ class TutorialCoachMarkWidget extends StatefulWidget {
   final Duration? focusAnimationDuration;
   final Duration? unFocusAnimationDuration;
   final Duration? pulseAnimationDuration;
+  final Duration? delayBetweenFocusAnimations;
   final Tween<double>? pulseVariation;
   final bool pulseEnable;
   final Widget? skipWidget;
@@ -85,6 +87,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
             focusAnimationDuration: widget.focusAnimationDuration,
             unFocusAnimationDuration: widget.unFocusAnimationDuration,
             pulseAnimationDuration: widget.pulseAnimationDuration,
+            delayBetweenFocusAnimations: widget.delayBetweenFocusAnimations,
             pulseVariation: widget.pulseVariation,
             pulseEnable: widget.pulseEnable,
             rootOverlay: widget.rootOverlay,

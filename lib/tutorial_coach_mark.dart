@@ -30,6 +30,7 @@ class TutorialCoachMark {
   final Duration focusAnimationDuration;
   final Duration unFocusAnimationDuration;
   final Duration pulseAnimationDuration;
+  final Duration delayBetweenFocusAnimations;
   final bool pulseEnable;
   final Widget? skipWidget;
   final EdgeInsets skipWidgetPadding;
@@ -55,6 +56,7 @@ class TutorialCoachMark {
     this.focusAnimationDuration = const Duration(milliseconds: 600),
     this.unFocusAnimationDuration = const Duration(milliseconds: 600),
     this.pulseAnimationDuration = const Duration(milliseconds: 500),
+    this.delayBetweenFocusAnimations = Duration.zero,
     this.pulseEnable = true,
     this.skipWidget,
     this.showSkipInLastTarget = true,
@@ -82,6 +84,7 @@ class TutorialCoachMark {
           focusAnimationDuration: focusAnimationDuration,
           unFocusAnimationDuration: unFocusAnimationDuration,
           pulseAnimationDuration: pulseAnimationDuration,
+          delayBetweenFocusAnimations: delayBetweenFocusAnimations,
           pulseEnable: pulseEnable,
           finish: finish,
           rootOverlay: rootOverlay,
