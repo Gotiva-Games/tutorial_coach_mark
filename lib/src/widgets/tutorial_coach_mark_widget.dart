@@ -263,20 +263,16 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
     return Align(
       alignment: currentTarget?.alignSkip ?? widget.alignSkip,
       child: SafeArea(
-        child: AnimatedOpacity(
-          opacity: showContent ? 1 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: InkWell(
-            onTap: skip,
-            child: Padding(
-              padding: widget.skipWidgetPadding ?? EdgeInsets.zero,
-              child: IgnorePointer(
-                child: widget.skipWidget ??
-                    Text(
-                      widget.textSkip,
-                      style: widget.textStyleSkip,
-                    ),
-              ),
+        child: InkWell(
+          onTap: skip,
+          child: Padding(
+            padding: widget.skipWidgetPadding ?? EdgeInsets.zero,
+            child: IgnorePointer(
+              child: widget.skipWidget ??
+                  Text(
+                    widget.textSkip,
+                    style: widget.textStyleSkip,
+                  ),
             ),
           ),
         ),

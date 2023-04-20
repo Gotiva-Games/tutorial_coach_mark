@@ -158,6 +158,7 @@ abstract class AnimatedFocusLightState extends State<AnimatedFocusLight>
       }
     });
 
+    if (!mounted) return;
     _controller.forward();
     _controller.duration = _targetFocus.unFocusAnimationDuration ??
         widget.unFocusAnimationDuration ??
