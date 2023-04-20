@@ -269,6 +269,7 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
             builder: (_, child) {
               _progressAnimated = _curvedAnimation.value;
               return Stack(
+                alignment: Alignment.center,
                 children: <Widget>[
                   SizedBox(
                     width: double.maxFinite,
@@ -399,6 +400,7 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
                   _progressAnimated = _tweenPulse.value;
                 }
                 return Stack(
+                  alignment: Alignment.center,
                   children: <Widget>[
                     SizedBox(
                       width: double.maxFinite,
@@ -437,11 +439,11 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
 
   @override
   void _runFocus() {
+    super._runFocus();
     _tweenPulse = _createTweenAnimation(_targetFocus.pulseVariation ??
         widget.pulseVariation ??
         defaultPulseVariation);
     _finishFocus = false;
-    super._runFocus();
   }
 
   @override

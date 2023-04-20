@@ -208,6 +208,14 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
             weight = MediaQuery.of(context).size.width - left!;
           }
           break;
+        case ContentAlign.center:
+          {
+            left = null;
+            top = null;
+            bottom = null;
+            weight = MediaQuery.of(context).size.width;
+          }
+          break;
         case ContentAlign.custom:
           {
             left = i.customPosition!.left;
