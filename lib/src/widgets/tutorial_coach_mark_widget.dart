@@ -77,6 +77,7 @@ class TutorialCoachMarkWidgetState extends State<TutorialCoachMarkWidget>
       type: MaterialType.transparency,
       child: Stack(
         children: <Widget>[
+          const IgnorePointer(),
           AnimatedFocusLight(
             key: _focusLightKey,
             targets: widget.targets,

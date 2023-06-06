@@ -246,6 +246,8 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
     return (_targetPosition?.size.height ?? 0) + _getPaddingFocus() * 4;
   }
 
+  bool _isFocusBlocked = false;
+
   void _refreshAfterOrientationChange() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       super._runFocus();
@@ -284,12 +286,15 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
                     top: top,
                     child: InkWell(
                       borderRadius: _betBorderRadiusTarget(),
-                      onTapDown: _tapHandlerForPosition,
+                      onTapDown:
+                          _isFocusBlocked ? null : _tapHandlerForPosition,
                       onTap: _targetFocus.enableTargetTab
-                          ? () => _tapHandler(targetTap: true)
+                          ? _isFocusBlocked
+                              ? null
+                              : () => _tapHandler(targetTap: true)
 
-                          /// Essential for collecting [TapDownDetails]. Do not make [null]
-                          : () {},
+                          /// Essential for collecting [TapDownDetails]. Do not make [null], when onTapDown is not [null]
+                          : null,
                       child: Container(
                         color: Colors.transparent,
                         width: width,
@@ -317,7 +322,10 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
       targetTap: targetTap,
       overlayTap: overlayTap,
     );
-    safeSetState(() => _goNext = goNext);
+    safeSetState(() {
+      _goNext = goNext;
+      _isFocusBlocked = true;
+    });
     _controller.reverse();
   }
 
@@ -325,6 +333,7 @@ class AnimatedStaticFocusLightState extends AnimatedFocusLightState {
   void _listener(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       widget.focus?.call(_targetFocus);
+      setState(() => _isFocusBlocked = false);
     }
     if (status == AnimationStatus.dismissed) {
       if (_goNext) {
@@ -348,6 +357,7 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
 
   bool _finishFocus = false;
   bool _initReverse = false;
+  bool _isFocusBlocked = false;
 
   get left => (_targetPosition?.offset.dx ?? 0) - _getPaddingFocus() * 2;
 
@@ -416,11 +426,14 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
                       child: InkWell(
                         borderRadius: _betBorderRadiusTarget(),
                         onTap: _targetFocus.enableTargetTab
-                            ? () => _tapHandler(targetTap: true)
+                            ? _isFocusBlocked
+                                ? null
+                                : () => _tapHandler(targetTap: true)
 
-                            /// Essential for collecting [TapDownDetails]. Do not make [null]
-                            : () {},
-                        onTapDown: _tapHandlerForPosition,
+                            /// Essential for collecting [TapDownDetails]. Do not make [null], when onTapDown is not [null]
+                            : null,
+                        onTapDown:
+                            _isFocusBlocked ? null : _tapHandlerForPosition,
                         child: Container(
                           color: Colors.transparent,
                           width: width,
@@ -462,6 +475,7 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
       safeSetState(() {
         _goNext = goNext;
         _initReverse = true;
+        _isFocusBlocked = true;
       });
     }
 
@@ -477,7 +491,10 @@ class AnimatedPulseFocusLightState extends AnimatedFocusLightState {
   @override
   void _listener(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
-      safeSetState(() => _finishFocus = true);
+      safeSetState(() {
+        _finishFocus = true;
+        _isFocusBlocked = false;
+      });
 
       widget.focus?.call(_targetFocus);
 
