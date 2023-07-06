@@ -20,6 +20,7 @@ class TutorialCoachMark {
   final Function()? onFinish;
   final double paddingFocus;
   final Function()? onSkip;
+  final Function()? onAbort;
   final AlignmentGeometry alignSkip;
   final String textSkip;
   final TextStyle textStyleSkip;
@@ -47,6 +48,7 @@ class TutorialCoachMark {
     this.onFinish,
     this.paddingFocus = 10,
     this.onSkip,
+    this.onAbort,
     this.alignSkip = Alignment.bottomRight,
     this.textSkip = "SKIP",
     this.skipWidgetPadding = const EdgeInsets.all(20),
@@ -111,6 +113,11 @@ class TutorialCoachMark {
 
   void skip() {
     onSkip?.call();
+    _removeOverlay();
+  }
+
+  void abort() {
+    onAbort?.call();
     _removeOverlay();
   }
 
